@@ -31,7 +31,7 @@ const pdfFilter = (req, file, cb) => {
 // For kits: kit_image (image) + manual_pdf (pdf)
 const uploadKitFiles = multer({
   storage: makeStorage('kits'),
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.fieldname === 'kit_image') return imageFilter(req, file, cb);
     if (file.fieldname === 'manual_pdf') return pdfFilter(req, file, cb);
