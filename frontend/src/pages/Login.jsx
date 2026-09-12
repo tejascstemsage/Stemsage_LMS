@@ -57,12 +57,11 @@ const Login = () => {
     <div className="login-page" style={bgStyle}>
       <div className="login-card">
         {branding.school_logo ? (
-          <img
-            className="login-card__logo"
-            src={`${UPLOADS_URL}/branding/${branding.school_logo}`}
-            alt="Logo"
-          />
-        ) : (
+         <img
+  className="login-card__logo"
+  src={branding.school_logo ? resolveFileUrl(branding.school_logo, 'branding') : defaultLogo}
+  alt="Logo"
+/>        ) : (
           <div className="login-card__logo-text">STEMSAGE</div>
         )}
 
