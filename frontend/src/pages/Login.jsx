@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api, { UPLOADS_URL } from '../api/axios';
+import defaultLogo from '../assets/logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -56,12 +57,11 @@ const Login = () => {
     <div className="login-page" style={bgStyle}>
       <div className="login-card">
         {branding.school_logo ? (
-          <img
-            className="login-card__logo"
-            src={`${UPLOADS_URL}/branding/${branding.school_logo}`}
-            alt="Logo"
-          />
-        ) : (
+         <img
+  className="login-card__logo"
+  src={branding.school_logo ? resolveFileUrl(branding.school_logo, 'branding') : defaultLogo}
+  alt="Logo"
+/>        ) : (
           <div className="login-card__logo-text">STEMSAGE</div>
         )}
 
