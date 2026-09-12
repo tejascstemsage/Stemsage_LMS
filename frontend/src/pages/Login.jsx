@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api, { UPLOADS_URL } from '../api/axios';
+import api, { resolveFileUrl } from '../api/axios';
+import defaultLogo from '../assets/logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -46,7 +47,7 @@ const Login = () => {
 
   const bgStyle = branding.login_background
     ? {
-        backgroundImage: `linear-gradient(${branding.login_overlay_color}, ${branding.login_overlay_color}), url(${UPLOADS_URL}/branding/${branding.login_background})`,
+        backgroundImage: `linear-gradient(${branding.login_overlay_color}, ${branding.login_overlay_color}), url(${resolveFileUrl(branding.login_background, 'branding')})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }
@@ -55,15 +56,11 @@ const Login = () => {
   return (
     <div className="login-page" style={bgStyle}>
       <div className="login-card">
-        {branding.school_logo ? (
-          <img
-            className="login-card__logo"
-            src={`${UPLOADS_URL}/branding/${branding.school_logo}`}
-            alt="Logo"
-          />
-        ) : (
-          <div className="login-card__logo-text">STEMSAGE</div>
-        )}
+        <img
+          className="login-card__logo"
+          src={branding.school_logo ? resolveFileUrl(branding.school_logo, 'branding') : defaultLogo}
+          alt="Logo"
+        />
 
         <h1 className="login-card__title">School Login</h1>
         <p className="login-card__subtitle">Access your assigned STEM kits</p>
