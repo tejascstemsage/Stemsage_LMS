@@ -1,0 +1,10 @@
+node_modules/
+.env
+dist/
+build/
+backend/uploads/kits/*
+backend/uploads/branding/*
+!backend/uploads/kits/.gitkeep
+!backend/uploads/branding/.gitkeep
+*.log
+.DS_Store
