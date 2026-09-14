@@ -12,7 +12,6 @@ const deleteFromCloudinary = async (url) => {
   if (!url || !url.includes('res.cloudinary.com')) return;
   try {
     const resourceType = url.includes('/raw/upload/') ? 'raw' : 'image';
-    // Everything between "/upload/v<digits>/" and the final file extension is the public_id.
     const match = url.match(/\/upload\/v\d+\/(.+)\.[a-zA-Z0-9]+$/);
     if (!match) return;
     const publicId = match[1];

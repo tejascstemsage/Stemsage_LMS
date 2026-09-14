@@ -3,9 +3,6 @@ const path = require('path');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('../config/cloudinary');
 
-// Files are stored permanently on Cloudinary. Render's own disk is wiped on every
-// restart/redeploy, so local disk storage would lose all uploads periodically.
-
 const imageFilter = (req, file, cb) => {
   const allowed = /jpeg|jpg|png|gif|webp/;
   const ok = allowed.test(path.extname(file.originalname).toLowerCase()) && allowed.test(file.mimetype);
@@ -18,8 +15,6 @@ const pdfFilter = (req, file, cb) => {
   cb(new Error('Only PDF files are allowed'));
 };
 
-// For kits: kit_image (image) + manual_pdf (pdf). PDFs need resource_type "raw" on
-// Cloudinary, so the storage engine picks the type per-field inside params().
 const kitStorage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
@@ -46,7 +41,6 @@ const uploadKitFiles = multer({
   { name: 'manual_pdf', maxCount: 1 }
 ]);
 
-// For branding: logo_image + bg_image (both images)
 const brandingStorage = new CloudinaryStorage({
   cloudinary,
   params: async () => ({

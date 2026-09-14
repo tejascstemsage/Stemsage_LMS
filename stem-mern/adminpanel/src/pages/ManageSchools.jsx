@@ -139,21 +139,21 @@ const ManageSchools = () => {
       {showModal && (
         <Modal title={editingId ? 'Edit School' : 'Add School'} onClose={() => setShowModal(false)}>
           <form onSubmit={handleSubmit}>
-            <label className="field-label">School Name *</label>
+            <label className="field-label">School Name</label>
             <input
               className="input"
-              required
               value={form.school_name}
               onChange={(e) => setForm({ ...form, school_name: e.target.value })}
+              required
             />
 
-            <label className="field-label">Email *</label>
+            <label className="field-label">Email</label>
             <input
-              className="input"
               type="email"
-              required
+              className="input"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
             />
 
             <label className="field-label">Contact</label>
@@ -164,26 +164,26 @@ const ManageSchools = () => {
             />
 
             <label className="field-label">
-              Password {editingId && <span className="muted">(leave blank to keep current)</span>} {!editingId && '*'}
+              {editingId ? 'New Password (leave blank to keep current)' : 'Password'}
             </label>
             <input
-              className="input"
               type="password"
-              required={!editingId}
+              className="input"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required={!editingId}
             />
 
-            <label className="checkbox-label">
+            <label className="checkbox-label" style={{ marginTop: 10 }}>
               <input
                 type="checkbox"
                 checked={form.is_active}
                 onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
               />
-              Active (school can log in)
+              <span>Active</span>
             </label>
 
-            <button type="submit" className="btn btn--primary btn--block" disabled={saving}>
+            <button type="submit" className="btn btn--primary btn--block" disabled={saving} style={{ marginTop: 16 }}>
               {saving ? 'Saving...' : editingId ? 'Update School' : 'Add School'}
             </button>
           </form>
