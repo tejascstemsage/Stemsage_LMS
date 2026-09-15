@@ -174,8 +174,18 @@ const ManageKits = () => {
       )}
 
       {showModal && (
-        <Modal title={editingId ? 'Edit Kit' : 'Add Kit'} onClose={() => setShowModal(false)} wide>
+        <Modal
+          title={editingId ? 'Edit Kit' : 'Add Kit'}
+          onClose={() => {
+            setShowModal(false);
+            setMessage(null);
+          }}
+          wide
+        >
           <form onSubmit={handleSubmit} className="form-grid">
+            {message?.type === 'danger' && (
+              <div className="alert alert--danger form-grid__full">{message.text}</div>
+            )}
             <div>
               <label className="field-label">Kit Name *</label>
               <input

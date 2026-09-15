@@ -137,8 +137,15 @@ const ManageSchools = () => {
       )}
 
       {showModal && (
-        <Modal title={editingId ? 'Edit School' : 'Add School'} onClose={() => setShowModal(false)}>
+        <Modal
+          title={editingId ? 'Edit School' : 'Add School'}
+          onClose={() => {
+            setShowModal(false);
+            setMessage(null);
+          }}
+        >
           <form onSubmit={handleSubmit}>
+            {message?.type === 'danger' && <div className="alert alert--danger">{message.text}</div>}
             <label className="field-label">School Name *</label>
             <input
               className="input"
