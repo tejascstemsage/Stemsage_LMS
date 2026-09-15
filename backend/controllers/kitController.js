@@ -1,30 +1,18 @@
-const fs = require('fs');
-const path = require('path');
 const Kit = require('../models/Kit');
 const Assignment = require('../models/Assignment');
+const { deleteFromCloudinary } = require('../config/cloudinary');
 
-const removeFile = (folder, filename) => {
-  if (!filename) return;
-  const filePath = path.join(__dirname, '..', 'uploads', folder, filename);
-  fs.unlink(filePath, () => {});
-};
-
-/* ---------------- ADMIN: was admin/manage_kits.php ---------------- */
-
-// GET /api/admin/kits
 const getAllKitsAdmin = async (req, res) => {
   const kits = await Kit.find().sort({ created_at: -1 });
   res.json({ success: true, kits });
 };
 
-// GET /api/admin/kits/:id
 const getKitByIdAdmin = async (req, res) => {
   const kit = await Kit.findById(req.params.id);
   if (!kit) return res.status(404).json({ success: false, message: 'Kit not found' });
   res.json({ success: true, kit });
 };
 
-// POST /api/admin/kits  (multipart: kit_image, manual_pdf)
 const createKit = async (req, res) => {
   const { kit_name, grade, subject, topic, description, video_url, learning_outcomes } = req.body;
 
@@ -40,14 +28,13 @@ const createKit = async (req, res) => {
     description,
     video_url,
     learning_outcomes,
-    kit_image: req.files?.kit_image?.[0]?.filename || '',
-    manual_pdf: req.files?.manual_pdf?.[0]?.filename || ''
+    kit_image: req.files?.kit_image?.[0]?.path || '',
+    manual_pdf: req.files?.manual_pdf?.[0]?.path || ''
   });
 
   res.status(201).json({ success: true, message: 'Kit added successfully!', kit });
 };
 
-// PUT /api/admin/kits/:id  (multipart: kit_image, manual_pdf - optional)
 const updateKit = async (req, res) => {
   const kit = await Kit.findById(req.params.id);
   if (!kit) return res.status(404).json({ success: false, message: 'Kit not found' });
@@ -63,44 +50,39 @@ const updateKit = async (req, res) => {
   kit.learning_outcomes = learning_outcomes ?? kit.learning_outcomes;
 
   if (req.files?.kit_image?.[0]) {
-    removeFile('kits', kit.kit_image);
-    kit.kit_image = req.files.kit_image[0].filename;
+    await deleteFromCloudinary(kit.kit_image);
+    kit.kit_image = req.files.kit_image[0].path;
   }
   if (req.files?.manual_pdf?.[0]) {
-    removeFile('kits', kit.manual_pdf);
-    kit.manual_pdf = req.files.manual_pdf[0].filename;
+    await deleteFromCloudinary(kit.manual_pdf);
+    kit.manual_pdf = req.files.manual_pdf[0].path;
   }
 
   await kit.save();
   res.json({ success: true, message: 'Kit updated successfully!', kit });
 };
 
-// DELETE /api/admin/kits/:id/image  (was the "delete image" action)
 const deleteKitImage = async (req, res) => {
   const kit = await Kit.findById(req.params.id);
   if (!kit) return res.status(404).json({ success: false, message: 'Kit not found' });
-  removeFile('kits', kit.kit_image);
+  await deleteFromCloudinary(kit.kit_image);
   kit.kit_image = '';
   await kit.save();
   res.json({ success: true, message: 'Image deleted successfully!', kit });
 };
 
-// DELETE /api/admin/kits/:id
 const deleteKit = async (req, res) => {
   const kit = await Kit.findById(req.params.id);
   if (!kit) return res.status(404).json({ success: false, message: 'Kit not found' });
 
-  removeFile('kits', kit.kit_image);
-  removeFile('kits', kit.manual_pdf);
+  await deleteFromCloudinary(kit.kit_image);
+  await deleteFromCloudinary(kit.manual_pdf);
   await Assignment.deleteMany({ kit: kit._id });
   await kit.deleteOne();
 
   res.json({ success: true, message: 'Kit deleted successfully!' });
 };
 
-/* ---------------- SCHOOL: was index.php (browse/search/filter/paginate) ---------------- */
-
-// GET /api/school/kits?search=&grade=all&subject=all&page=1
 const getMyKits = async (req, res) => {
   const schoolId = req.school.id;
   const itemsPerPage = 9;
