@@ -1,4 +1,4 @@
-import { UPLOADS_URL } from '../api/axios';
+import { resolveFileUrl } from '../api/axios';
 
 const KitCard = ({ kit, onWatchVideo, onViewPdf, onShowOutcomes }) => {
   const outcomesSnippet =
@@ -10,7 +10,7 @@ const KitCard = ({ kit, onWatchVideo, onViewPdf, onShowOutcomes }) => {
     <div className="kit-card">
       <div className="kit-card__image">
         {kit.kit_image ? (
-          <img src={`${UPLOADS_URL}/kits/${kit.kit_image}`} alt={kit.kit_name} />
+          <img src={resolveFileUrl(kit.kit_image, 'kits')} alt={kit.kit_name} />
         ) : (
           <div className="kit-card__image-placeholder">
             <span>{kit.subject?.[0] || 'K'}</span>
