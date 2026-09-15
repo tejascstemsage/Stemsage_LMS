@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
-import api, { UPLOADS_URL } from '../api/axios';
+import api, { resolveFileUrl } from '../api/axios';
 
 const emptyForm = {
   kit_name: '',
@@ -142,7 +142,7 @@ const ManageKits = () => {
                     {kit.kit_image ? (
                       <img
                         className="table-thumb"
-                        src={`${UPLOADS_URL}/kits/${kit.kit_image}`}
+                        src={resolveFileUrl(kit.kit_image, 'kits')}
                         alt={kit.kit_name}
                       />
                     ) : (
