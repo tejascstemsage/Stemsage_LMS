@@ -52,7 +52,7 @@ const brandingStorage = new CloudinaryStorage({
 
 const uploadBrandingFiles = multer({
   storage: brandingStorage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: imageFilter
 }).fields([
   { name: 'logo_image', maxCount: 1 },
