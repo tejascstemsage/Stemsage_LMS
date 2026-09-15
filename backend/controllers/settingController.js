@@ -1,6 +1,5 @@
-const fs = require('fs');
-const path = require('path');
 const Setting = require('../models/Setting');
+const { deleteFromCloudinary } = require('../config/cloudinary');
 
 const DEFAULTS = {
   login_background: '',
@@ -10,13 +9,6 @@ const DEFAULTS = {
   login_secondary_color: '#7c3aed'
 };
 
-const removeFile = (filename) => {
-  if (!filename) return;
-  const filePath = path.join(__dirname, '..', 'uploads', 'branding', filename);
-  fs.unlink(filePath, () => {});
-};
-
-// GET /api/settings  (public - used to brand the login page, was getSetting() calls)
 const getSettings = async (req, res) => {
   const rows = await Setting.find();
   const settings = { ...DEFAULTS };
@@ -26,7 +18,6 @@ const getSettings = async (req, res) => {
   res.json({ success: true, settings });
 };
 
-// PUT /api/admin/settings  (admin only, multipart: logo_image, bg_image) - was admin/settings.php
 const updateSettings = async (req, res) => {
   const { overlay_color, primary_color, secondary_color } = req.body;
 
@@ -37,13 +28,13 @@ const updateSettings = async (req, res) => {
 
   if (req.files?.logo_image?.[0]) {
     const current = await Setting.findOne({ setting_key: 'school_logo' });
-    if (current?.setting_value) removeFile(current.setting_value);
-    updates.school_logo = req.files.logo_image[0].filename;
+    if (current?.setting_value) await deleteFromCloudinary(current.setting_value);
+    updates.school_logo = req.files.logo_image[0].path;
   }
   if (req.files?.bg_image?.[0]) {
     const current = await Setting.findOne({ setting_key: 'login_background' });
-    if (current?.setting_value) removeFile(current.setting_value);
-    updates.login_background = req.files.bg_image[0].filename;
+    if (current?.setting_value) await deleteFromCloudinary(current.setting_value);
+    updates.login_background = req.files.bg_image[0].path;
   }
 
   const keys = Object.keys(updates);
