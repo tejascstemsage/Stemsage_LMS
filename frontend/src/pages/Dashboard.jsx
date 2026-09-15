@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import KitCard from '../components/KitCard';
 import Modal from '../components/Modal';
-import api, { UPLOADS_URL } from '../api/axios';
+import api, { resolveFileUrl } from '../api/axios';
 
 const getYouTubeEmbed = (url) => {
   const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
@@ -180,7 +180,7 @@ const Dashboard = () => {
           <iframe
             width="100%"
             height="500"
-            src={`${UPLOADS_URL}/kits/${pdfFile}`}
+            src={resolveFileUrl(pdfFile, 'kits')}
             title="Kit manual"
             style={{ border: 0, borderRadius: 8 }}
           />
