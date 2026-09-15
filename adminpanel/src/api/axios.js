@@ -24,4 +24,12 @@ api.interceptors.response.use(
 
 export const UPLOADS_URL = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:5000/uploads';
 
+// New uploads are full Cloudinary URLs (start with http). Any older local files
+// (from before the Cloudinary migration) fall back to the old /uploads/<folder>/ path.
+export const resolveFileUrl = (value, folder) => {
+  if (!value) return '';
+  if (value.startsWith('http')) return value;
+  return `${UPLOADS_URL}/${folder}/${value}`;
+};
+
 export default api;

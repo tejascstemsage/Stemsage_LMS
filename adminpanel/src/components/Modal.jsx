@@ -1,6 +1,7 @@
 const Modal = ({ title, onClose, children, wide }) => (
-  <div className="modal-overlay" onClick={onClose}>
-    <div className={`modal${wide ? ' modal--wide' : ''}`} onClick={(e) => e.stopPropagation()}>
+  // mousedown, not click: a text-selection drag released over the overlay fires click on it
+  <div className="modal-overlay" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+    <div className={`modal${wide ? ' modal--wide' : ''}`}>
       <div className="modal__header">
         <h3>{title}</h3>
         <button className="modal__close" onClick={onClose}>
