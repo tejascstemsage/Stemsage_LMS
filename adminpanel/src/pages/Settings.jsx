@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
-import api, { UPLOADS_URL } from '../api/axios';
+import api, { resolveFileUrl } from '../api/axios';
 
 const Settings = () => {
   const [settings, setSettings] = useState(null);
@@ -75,7 +75,7 @@ const Settings = () => {
           <label className="field-label">School / Site Logo</label>
           {settings.school_logo && (
             <img
-              src={`${UPLOADS_URL}/branding/${settings.school_logo}`}
+              src={resolveFileUrl(settings.school_logo, 'branding')}
               alt="Current logo"
               style={{ height: 60, marginBottom: 8, display: 'block' }}
             />
@@ -87,7 +87,7 @@ const Settings = () => {
           <label className="field-label">Login Background Image</label>
           {settings.login_background && (
             <img
-              src={`${UPLOADS_URL}/branding/${settings.login_background}`}
+              src={resolveFileUrl(settings.login_background, 'branding')}
               alt="Current background"
               style={{ height: 60, marginBottom: 8, display: 'block' }}
             />
