@@ -184,6 +184,13 @@ const Dashboard = () => {
             title="Kit manual"
             style={{ border: 0, borderRadius: 8 }}
           />
+          {/* ponytail: link always shown - a cross-origin iframe that fails to load fires no detectable error */}
+          <p style={{ marginTop: 12, fontSize: 13.5, color: '#64748b' }}>
+            Manual not showing?{' '}
+            <a href={resolveFileUrl(pdfFile, 'kits')} target="_blank" rel="noreferrer">
+              Open it in a new tab
+            </a>
+          </p>
         </Modal>
       )}
 

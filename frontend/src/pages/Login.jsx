@@ -60,6 +60,9 @@ const Login = () => {
           className="login-card__logo"
           src={branding.school_logo ? resolveFileUrl(branding.school_logo, 'branding') : defaultLogo}
           alt="Logo"
+          onError={(e) => {
+            e.currentTarget.src = defaultLogo;
+          }}
         />
 
         <h1 className="login-card__title">School Login</h1>

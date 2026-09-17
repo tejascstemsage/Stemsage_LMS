@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import api, { resolveFileUrl } from '../api/axios';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logo, setLogo] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    api.get('/settings').then(({ data }) => {
+      if (data.success) setLogo(data.settings.school_logo);
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +41,16 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="login-card">
-        <div className="login-card__logo-text">STEMSAGE</div>
+        {logo ? (
+          <img
+            className="login-card__logo"
+            src={resolveFileUrl(logo, 'branding')}
+            alt="STEMSAGE"
+            onError={() => setLogo('')}
+          />
+        ) : (
+          <div className="login-card__logo-text">STEMSAGE</div>
+        )}
         <h1 className="login-card__title">Admin Login</h1>
         <p className="login-card__subtitle">Manage kits, schools & assignments</p>
 
